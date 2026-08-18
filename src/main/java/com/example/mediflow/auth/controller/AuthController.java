@@ -1,5 +1,7 @@
 package com.example.mediflow.auth.controller;
 
+import com.example.mediflow.auth.dto.LoginRequest;
+import com.example.mediflow.auth.dto.LoginResponse;
 import com.example.mediflow.auth.dto.RegisterRequest;
 import com.example.mediflow.auth.dto.UserResponse;
 import com.example.mediflow.auth.service.AuthService;
@@ -7,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,5 +28,19 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request
+    ) {
+        LoginResponse response = authService.login(request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public String me(Authentication authentication) {
+        return "Authenticated as: " + authentication.getName();
     }
 }
