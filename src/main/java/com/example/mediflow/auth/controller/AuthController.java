@@ -1,5 +1,7 @@
 package com.example.mediflow.auth.controller;
 
+import com.example.mediflow.auth.dto.LoginRequest;
+import com.example.mediflow.auth.dto.LoginResponse;
 import com.example.mediflow.auth.dto.RegisterRequest;
 import com.example.mediflow.auth.dto.UserResponse;
 import com.example.mediflow.auth.service.AuthService;
@@ -25,5 +27,14 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request
+    ) {
+        LoginResponse response = authService.login(request);
+
+        return ResponseEntity.ok(response);
     }
 }
