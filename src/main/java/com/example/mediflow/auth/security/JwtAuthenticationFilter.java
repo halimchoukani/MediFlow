@@ -1,5 +1,6 @@
 package com.example.mediflow.auth.security;
 
+import com.example.mediflow.user.entity.UserRole;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,17 +46,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (jwtService.isTokenValid(token)) {
 
-                UUID userId =
-                        jwtService.extractUserId(token);
+                UUID userId = jwtService.extractUserId(token);
+                String email = jwtService.extractEmail(token);
+                UserRole role = jwtService.extractRole(token);
 
-                String email =
-                        jwtService.extractEmail(token);
+                UserPrincipal principal = new UserPrincipal(
+                        userId,
+                        email,
+                        role
+                );
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                email,
+                                principal,
                                 null,
-                                null
+                                principal.getAuthorities()
                         );
 
                 authentication.setDetails(

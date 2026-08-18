@@ -43,6 +43,10 @@ public class User {
     @Column(nullable = false, length = 20)
     private UserStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
@@ -70,7 +74,7 @@ public class User {
         OffsetDateTime now = OffsetDateTime.now();
         user.createdAt = now;
         user.updatedAt = now;
-
+        user.role = UserRole.PATIENT;
         return user;
     }
 }

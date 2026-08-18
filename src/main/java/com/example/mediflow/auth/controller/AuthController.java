@@ -4,13 +4,17 @@ import com.example.mediflow.auth.dto.LoginRequest;
 import com.example.mediflow.auth.dto.LoginResponse;
 import com.example.mediflow.auth.dto.RegisterRequest;
 import com.example.mediflow.auth.dto.UserResponse;
+import com.example.mediflow.auth.security.UserPrincipal;
 import com.example.mediflow.auth.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -40,7 +44,20 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public String me(Authentication authentication) {
-        return "Authenticated as: " + authentication.getName();
+    public Map<String, Object> me(Authentication authentication) {
+
+        UserPrincipal principal =
+                (UserPrincipal) authentication.getPrincipal();
+
+        return Map.of(
+                "id", principal.getId(),
+                "email", principal.getUsername(),
+                "role", principal.getRole()
+        );
+    }
+    @GetMapping("/patient-only")
+    @PreAuthorize("hasRole('PATIENT')")
+    public String patientOnly() {
+        return "You are a patient";
     }
 }
