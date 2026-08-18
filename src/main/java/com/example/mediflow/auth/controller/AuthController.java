@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,5 +37,10 @@ public class AuthController {
         LoginResponse response = authService.login(request);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public String me(Authentication authentication) {
+        return "Authenticated as: " + authentication.getName();
     }
 }
