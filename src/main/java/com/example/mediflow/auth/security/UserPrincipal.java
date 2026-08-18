@@ -1,4 +1,54 @@
 package com.example.mediflow.auth.security;
 
-public class UserPrincipal {
+import com.example.mediflow.user.entity.User;
+import com.example.mediflow.user.entity.UserRole;
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+
+public class UserPrincipal implements UserDetails {
+
+    @Getter
+    private final UUID id;
+    private final String email;
+    private final String password;
+    @Getter
+    private final UserRole role;
+
+    public UserPrincipal(
+            UUID id,
+            String email,
+            UserRole role
+    ) {
+        this.id = id;
+        this.email = email;
+        this.password = null;
+        this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return List.of(
+                new SimpleGrantedAuthority(
+                        "ROLE_" + role.name()
+                )
+        );
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }

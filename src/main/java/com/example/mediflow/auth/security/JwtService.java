@@ -1,5 +1,6 @@
 package com.example.mediflow.auth.security;
 
+import com.example.mediflow.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -28,16 +29,18 @@ public class JwtService {
         this.expiration = expiration;
     }
 
-    public String generateToken(UUID userId, String email) {
-
+    public String generateToken(
+            UUID userId,
+            String email,
+            UserRole role
+    ) {
         Date now = new Date();
-
-        Date expirationDate =
-                new Date(now.getTime() + expiration);
+        Date expirationDate = new Date(now.getTime() + expiration);
 
         return Jwts.builder()
                 .subject(userId.toString())
                 .claim("email", email)
+                .claim("role", role.name())
                 .issuedAt(now)
                 .expiration(expirationDate)
                 .signWith(signingKey)
@@ -64,6 +67,11 @@ public class JwtService {
 
         return extractClaims(token)
                 .get("email", String.class);
+    }
+    public UserRole extractRole(String token) {
+        return UserRole.valueOf(
+                extractClaims(token).get("role", String.class)
+        );
     }
 
     public boolean isTokenValid(String token) {

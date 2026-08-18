@@ -1,4 +1,10 @@
 package com.example.mediflow.user.entity;
 
-public class UserRole {
+public enum UserRole {
+
+    ADMIN,
+    DOCTOR,
+    NURSE,
+    RECEPTIONIST,
+    PATIENT
 }
