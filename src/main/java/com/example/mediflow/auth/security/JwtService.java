@@ -1,5 +1,6 @@
 package com.example.mediflow.auth.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,5 +42,37 @@ public class JwtService {
                 .expiration(expirationDate)
                 .signWith(signingKey)
                 .compact();
+    }
+
+    public Claims extractClaims(String token) {
+
+        return Jwts.parser()
+                .verifyWith(signingKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public UUID extractUserId(String token) {
+
+        return UUID.fromString(
+                extractClaims(token).getSubject()
+        );
+    }
+
+    public String extractEmail(String token) {
+
+        return extractClaims(token)
+                .get("email", String.class);
+    }
+
+    public boolean isTokenValid(String token) {
+
+        try {
+            extractClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
