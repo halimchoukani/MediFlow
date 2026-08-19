@@ -32,4 +32,14 @@ public class UserController {
                 )
         );
     }
+
+    @PatchMapping("/{userId}/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponse> deactivateUser(
+            @PathVariable UUID userId
+    ) {
+        UserResponse response = userService.deactivateUser(userId);
+
+        return ResponseEntity.ok(response);
+    }
 }
