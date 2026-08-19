@@ -1,5 +1,6 @@
 package com.example.mediflow.auth.dto;
 
+import com.example.mediflow.user.entity.UserRole;
 import com.example.mediflow.user.entity.UserStatus;
 
 import java.time.OffsetDateTime;
@@ -12,6 +13,7 @@ public record UserResponse(
         String lastName,
         String phone,
         UserStatus status,
-        OffsetDateTime createdAt
+        OffsetDateTime createdAt,
+        UserRole role
 ) {
 }
