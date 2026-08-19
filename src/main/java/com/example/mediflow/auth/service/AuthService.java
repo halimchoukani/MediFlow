@@ -53,7 +53,8 @@ public class AuthService {
                 savedUser.getLastName(),
                 savedUser.getPhone(),
                 savedUser.getStatus(),
-                savedUser.getCreatedAt()
+                savedUser.getCreatedAt(),
+                savedUser.getRole()
         );
     }
 
