@@ -67,6 +67,11 @@ public class AuthService {
                         new IllegalArgumentException("Invalid email or password")
                 );
 
+        if (!user.getStatus().equals(UserStatus.ACTIVE)) {
+            throw new IllegalArgumentException(
+                    "Invalid email or password"
+            );
+        }
         if (!passwordEncoder.matches(
                 request.password(),
                 user.getPasswordHash()
