@@ -1,6 +1,9 @@
 package com.example.mediflow.department.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -15,6 +18,8 @@ import java.util.UUID;
                 )
         }
 )
+@Getter @Setter
+@NoArgsConstructor
 public class Department {
 
     @Id
@@ -49,5 +54,4 @@ public class Department {
         updatedAt = OffsetDateTime.now();
     }
 
-    // getters and setters
 }
